@@ -1,0 +1,35 @@
+class Process:
+    def __init__(self, process_id, arrival_time, burst_time):
+        self.process_id = process_id
+        self.arrival_time = arrival_time
+        self.burst_time = burst_time
+
+def fcfs_scheduling(processes):
+    total_processes = len(processes)
+    waiting_time = [0] * total_processes
+    turnaround_time = [0] * total_processes
+    
+    waiting_time[0] = 0  # First process has no waiting time
+    
+    # Calculate waiting time for each process
+    for i in range(1, total_processes):
+        waiting_time[i] = waiting_time[i - 1] + processes[i - 1].burst_time
+    
+    # Calculate turnaround time for each process
+    for i in range(total_processes):
+        turnaround_time[i] = waiting_time[i] + processes[i].burst_time
+    
+    print("Process\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time")
+    for i in range(total_processes):
+        print(f"P{processes[i].process_id}\t\t{processes[i].arrival_time}\t\t{processes[i].burst_time}\t\t{waiting_time[i]}\t\t{turnaround_time[i]}")
+
+if __name__ == "__main__":
+    # Create a list of processes with process_id, arrival_time, and burst_time
+    processes = [
+        Process(1, 0, 10),
+        Process(2, 2, 5),
+        Process(3, 4, 8),
+        Process(4, 5, 3)
+    ]
+    
+    fcfs_scheduling(processes)

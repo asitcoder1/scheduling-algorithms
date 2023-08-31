@@ -1,4 +1,4 @@
-# scheduling-algorithms
+# FCFS scheduling-algorithms
 
 For FCFS scheduling algorithm, read the number of processes/jobs in the system,
 their CPU burst times. The scheduling is performed on the basis of arrival time of

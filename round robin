@@ -1,0 +1,65 @@
+#include <stdio.h>
+
+struct Process {
+    int processID;
+    int burstTime;
+    int remainingTime;
+    int turnaroundTime;
+    int waitingTime;
+};
+
+void calculateTimes(struct Process processes[], int n, int quantum) {
+    int currentTime = 0;
+    int completedProcesses = 0;
+
+    while (completedProcesses < n) {
+        for (int i = 0; i < n; i++) {
+            if (processes[i].remainingTime > 0) {
+                if (processes[i].remainingTime <= quantum) {
+                    currentTime += processes[i].remainingTime;
+                    processes[i].remainingTime = 0;
+                    processes[i].turnaroundTime = currentTime;
+                    processes[i].waitingTime = processes[i].turnaroundTime - processes[i].burstTime;
+                    completedProcesses++;
+                } else {
+                    currentTime += quantum;
+                    processes[i].remainingTime -= quantum;
+                }
+            }
+        }
+    }
+}
+
+void printProcesses(struct Process processes[], int n) {
+    printf("Process ID\tBurst Time\tTurnaround Time\tWaiting Time\n");
+
+    for (int i = 0; i < n; i++) {
+        printf("%d\t\t%d\t\t%d\t\t%d\n",
+               processes[i].processID,
+               processes[i].burstTime,
+               processes[i].turnaroundTime,
+               processes[i].waitingTime);
+    }
+}
+
+int main() {
+    int n, quantum;
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
+
+    struct Process processes[n];
+    for (int i = 0; i < n; i++) {
+        processes[i].processID = i + 1;
+        printf("Enter burst time for process %d: ", i + 1);
+        scanf("%d", &processes[i].burstTime);
+        processes[i].remainingTime = processes[i].burstTime;
+    }
+
+    printf("Enter time quantum: ");
+    scanf("%d", &quantum);
+
+    calculateTimes(processes, n, quantum);
+    printProcesses(processes, n);
+
+    return 0;
+}
